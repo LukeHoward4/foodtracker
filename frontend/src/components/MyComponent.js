@@ -1,9 +1,24 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import Axios from 'axios';
 
-function MyComponent() {
-    return(
-        <div>THIS IS MY CONTENT</div>
-    )
+function FoodList() {
+  const [foods, setFoods] = useState([]);
+
+  useEffect(() => {
+    Axios.get('http://localhost:3001/api/foods')
+      .then((response) => setFoods(response.data))
+      .catch((error) => console.error('Error fetching data:', error));
+  }, []);
+
+  return (
+    <ul>
+      {foods.map((food) => (
+        <li key={food.id}>
+          {food.name} ({food.type}) - {food.calories} cal
+        </li>
+      ))}
+    </ul>
+  );
 }
 
-export default MyComponent;
+export default FoodList;
